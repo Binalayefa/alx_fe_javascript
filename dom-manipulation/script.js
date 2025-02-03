@@ -4,19 +4,6 @@ let quotes = [
     // Add more quotes as needed
   ];
   
-  // Function to save quotes to local storage
-  function saveQuotes() {
-    localStorage.setItem('quotes', JSON.stringify(quotes)); // Save the quotes array as a JSON string
-  }
-  
-  // Function to load quotes from local storage
-  function loadQuotes() {
-    const storedQuotes = localStorage.getItem('quotes');
-    if (storedQuotes) {
-      quotes = JSON.parse(storedQuotes); // Parse the JSON string back into an array
-    }
-  }
-  
   // Function to display a random quote
   function showRandomQuote() {
     const randomIndex = Math.floor(Math.random() * quotes.length);
@@ -62,19 +49,47 @@ let quotes = [
   function addQuote(text, category) {
     const newQuote = { text, category };
     quotes.push(newQuote); // Add the new quote to the array
-    saveQuotes(); // Save quotes to local storage after adding
-    showRandomQuote(); // Display a random quote
-  
-// Export quotes to JSON
-function exportToJson() {
-    // Create a Blob from the quotes array, specifying the type as 'application/json'
-    const blob = new Blob([JSON.stringify(quotes)], { type: 'application/json' });
-    
-    // Create a temporary link element to trigger the download
-    const link = document.createElement('a');
-    link.href = URL.createObjectURL(blob); // Create an object URL for the Blob
-    link.download = 'quotes.json'; // Name of the file to be downloaded
-    link.click(); // Trigger the download by simulating a click on the link
+    showRandomQuote(); // Display a random quote after adding
   }
   
+  // Event listener for the "Show New Quote" button
+  const newQuoteButton = document.getElementById('newQuote');
+  newQuoteButton.addEventListener('click', showRandomQuote);
   
+  // Function to save quotes to local storage
+  function saveQuotes() {
+    localStorage.setItem('quotes', JSON.stringify(quotes));  // Save quotes array to localStorage
+  }
+  
+  // Import quotes from JSON
+  function importFromJsonFile(event) {
+    const fileReader = new FileReader();  // Create a new instance of FileReader
+    
+    fileReader.onload = function(event) { // When the file is loaded successfully
+      const importedQuotes = JSON.parse(event.target.result);  // Parse the file content as JSON
+      quotes.push(...importedQuotes);  // Add the imported quotes to the existing quotes array
+      saveQuotes();  // Save the updated quotes to localStorage
+      alert('Quotes imported successfully!');
+    };
+    
+    fileReader.readAsText(event.target.files[0]);  // Read the content of the uploaded file as text
+  }
+  
+  // Export quotes to JSON
+  function exportToJson() {
+    const blob = new Blob([JSON.stringify(quotes)], { type: 'application/json' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = 'quotes.json';
+    link.click();
+  }
+  
+  // Call the function to create and display the add quote form
+  createAddQuoteForm();
+  
+
+
+
+
+
+
