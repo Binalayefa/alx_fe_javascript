@@ -65,5 +65,16 @@ let quotes = [
     saveQuotes(); // Save quotes to local storage after adding
     showRandomQuote(); // Display a random quote
   
-
+// Export quotes to JSON
+function exportToJson() {
+    // Create a Blob from the quotes array, specifying the type as 'application/json'
+    const blob = new Blob([JSON.stringify(quotes)], { type: 'application/json' });
+    
+    // Create a temporary link element to trigger the download
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob); // Create an object URL for the Blob
+    link.download = 'quotes.json'; // Name of the file to be downloaded
+    link.click(); // Trigger the download by simulating a click on the link
+  }
+  
   
