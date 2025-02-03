@@ -1,33 +1,28 @@
+// Define the array of quotes with text and category
 let quotes = [
-    {
-      text: "The only way to do great work is to love what you do.",
-      category: "Inspiration"
-    },
-    {
-      text: "Life is what happens when you're busy making other plans.",
-      category: "Life"
-    }
+    { text: "The journey of a thousand miles begins with one step.", category: "Motivation" },
+    { text: "Life is what happens when you're busy making other plans.", category: "Life" },
+    { text: "To be yourself in a world that is constantly trying to make you something else is the greatest accomplishment.", category: "Inspiration" }
   ];
   
-  function displayRandomQuote() {
+  // Function to display a random quote
+  function showRandomQuote() {
+    // Generate a random index based on the length of the quotes array
     const randomIndex = Math.floor(Math.random() * quotes.length);
-    const randomQuote = quotes[randomIndex];
     
-    const quoteDisplay = document.getElementById("quoteDisplay");
-    quoteDisplay.textContent = `${randomQuote.text} - ${randomQuote.category}`;
+    // Select the random quote
+    const quote = quotes[randomIndex];
+  
+    // Update the DOM by using innerHTML to insert the quote into the page
+    document.getElementById("quoteDisplay").innerHTML = `
+      <p><strong>Category:</strong> ${quote.category}</p>
+      <p><em>"${quote.text}"</em></p>
+    `;
   }
   
-  function addQuote() {
-    const newQuoteText = document.getElementById("newQuoteText").value;
-    const newQuoteCategory = document.getElementById("newQuoteCategory").value;
-    
-    quotes.push({
-      text: newQuoteText,
-      category: newQuoteCategory
-    });
-    
-    displayRandomQuote();  // Show the newly added quote
-  }
+  // Event listener for button to show a new quote when clicked
+  document.getElementById("newQuote").addEventListener("click", showRandomQuote);
   
-  document.getElementById("newQuote").addEventListener("click", displayRandomQuote);
+  // Call showRandomQuote function initially to display a quote on page load
+  showRandomQuote();
   
