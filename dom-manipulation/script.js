@@ -4,6 +4,19 @@ let quotes = [
     // Add more quotes as needed
   ];
   
+  // Function to save quotes to local storage
+  function saveQuotes() {
+    localStorage.setItem('quotes', JSON.stringify(quotes)); // Save the quotes array as a JSON string
+  }
+  
+  // Function to load quotes from local storage
+  function loadQuotes() {
+    const storedQuotes = localStorage.getItem('quotes');
+    if (storedQuotes) {
+      quotes = JSON.parse(storedQuotes); // Parse the JSON string back into an array
+    }
+  }
+  
   // Function to display a random quote
   function showRandomQuote() {
     const randomIndex = Math.floor(Math.random() * quotes.length);
@@ -24,19 +37,19 @@ let quotes = [
     quoteCategoryInput.id = 'newQuoteCategory';
     quoteCategoryInput.type = 'text';
     quoteCategoryInput.placeholder = 'Enter quote category';
-  
+    
     const addButton = document.createElement('button');
     addButton.type = 'submit';
     addButton.textContent = 'Add Quote';
-  
+    
     form.appendChild(quoteTextInput);
     form.appendChild(quoteCategoryInput);
     form.appendChild(addButton);
-  
+    
     const quoteFormContainer = document.getElementById('quoteForm');
     quoteFormContainer.innerHTML = ''; 
     quoteFormContainer.appendChild(form);
-  
+    
     form.addEventListener('submit', function(event) {
       event.preventDefault();
       const newQuoteText = quoteTextInput.value;
@@ -49,15 +62,8 @@ let quotes = [
   function addQuote(text, category) {
     const newQuote = { text, category };
     quotes.push(newQuote); // Add the new quote to the array
-    showRandomQuote(); // Display a random quote after adding
-  }
-  
-  // Event listener for the "Show New Quote" button
-  const newQuoteButton = document.getElementById('newQuote');
-  newQuoteButton.addEventListener('click', showRandomQuote);
-  
-  // Call the function to create and display the add quote form
-  createAddQuoteForm();
+    saveQuotes(); // Save quotes to local storage after adding
+    showRandomQuote(); // Display a random quote
   
 
   
