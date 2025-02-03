@@ -21,8 +21,5 @@ let quotes = [
   }
   
   // Event listener for button to show a new quote when clicked
-  document.getElementById("newQuote").addEventListener("click", showRandomQuote);
-  
-  // Call showRandomQuote function initially to display a quote on page load
-  showRandomQuote();
+  document.getElementById("newQuote").addEventListener
   
