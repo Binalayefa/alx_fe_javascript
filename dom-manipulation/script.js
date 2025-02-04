@@ -1,4 +1,4 @@
-let quotes = JSON.parse(localStorage.getItem('quotes')) || [];
+here is my script, kindly add the syncQuotes function to it  let quotes = JSON.parse(localStorage.getItem('quotes')) || [];
 
 // Function to fetch quotes from the mock server
 async function fetchQuotesFromServer() {
@@ -88,7 +88,7 @@ function displayQuotes(filteredQuotes) {
     if (filteredQuotes.length > 0) {
         const randomIndex = Math.floor(Math.random() * filteredQuotes.length);
         const randomQuote = filteredQuotes[randomIndex];
-        quoteDisplay.innerHTML = `${randomQuote.text} - <em>${randomQuote.category}</em>`;
+        quoteDisplay.innerHTML = ${randomQuote.text} - <em>${randomQuote.category}</em>;
     } else {
         quoteDisplay.innerHTML = 'No quotes available.';
     }
@@ -99,4 +99,3 @@ document.addEventListener('DOMContentLoaded', function() {
     displayQuotes(quotes);
     fetchQuotesFromServer();
 });
-
