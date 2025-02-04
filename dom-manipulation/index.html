@@ -18,6 +18,15 @@
 <!-- Export Quotes to JSON Button -->
 <button id="exportJsonButton">Export Quotes to JSON</button>
 
+<!-- Category Filter Dropdown -->
+<select id="categoryFilter" onchange="filterQuotes()">
+  <option value="all">All Categories</option>
+  <!-- Categories will be populated dynamically -->
+</select>
+
+
+
+
 <!-- Import Quotes from JSON File -->
 <input type="file" id="importFile" accept=".json" />
 
