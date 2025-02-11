@@ -1,4 +1,8 @@
-let quotes = JSON.parse(localStorage.getItem('quotes')) || [];
+// Load quotes from localStorage or initialize an empty array
+let quotes = JSON.parse(localStorage.getItem('quotes')) || [
+    { text: "The best way to predict the future is to create it.", category: "Motivation" },
+    { text: "Success is not final, failure is not fatal: it is the courage to continue that counts.", category: "Success" }
+];
 
 // Function to fetch quotes from the mock server
 async function fetchQuotesFromServer() {
@@ -22,11 +26,11 @@ async function fetchQuotesFromServer() {
 async function postQuoteToServer(quote) {
     try {
         const response = await fetch('https://jsonplaceholder.typicode.com/posts', {
-            method: 'POST',  // HTTP method
+            method: 'POST',  
             headers: {
-                'Content-Type': 'application/json' // Specify JSON format
+                'Content-Type': 'application/json'
             },
-            body: JSON.stringify(quote) // Convert data to JSON
+            body: JSON.stringify(quote)
         });
 
         if (!response.ok) {
@@ -39,11 +43,10 @@ async function postQuoteToServer(quote) {
     }
 }
 
-// Function to resolve conflicts
+// Function to resolve conflicts (avoiding duplicate quotes)
 function resolveConflicts(serverQuotes) {
     let localQuotes = JSON.parse(localStorage.getItem('quotes')) || [];
     
-    // Merge server quotes, avoiding duplicates
     serverQuotes.forEach(serverQuote => {
         const existsLocally = localQuotes.some(q => q.text === serverQuote.text);
         if (!existsLocally) {
@@ -54,7 +57,7 @@ function resolveConflicts(serverQuotes) {
     // Save updated quotes to localStorage
     localStorage.setItem('quotes', JSON.stringify(localQuotes));
     quotes = localQuotes;
-    displayQuotes(quotes);
+    displayRandomQuote();
 }
 
 // Function to sync quotes with the server (both fetching and posting)
@@ -76,31 +79,48 @@ async function syncQuotes() {
 // Periodic Syncing every 30 seconds
 setInterval(syncQuotes, 30000);
 
-// Function to add a new quote and sync it
-function addQuote(text, category) {
-    const newQuote = { text, category };
-    quotes.push(newQuote);
-    localStorage.setItem('quotes', JSON.stringify(quotes));
-
-    // Post new quote to the server
-    postQuoteToServer(newQuote);
-    displayQuotes(quotes);
-}
-
-// Function to display quotes
-function displayQuotes(filteredQuotes) {
+// Function to display a random quote
+function displayRandomQuote() {
     const quoteDisplay = document.getElementById('quoteDisplay');
-    if (filteredQuotes.length > 0) {
-        const randomIndex = Math.floor(Math.random() * filteredQuotes.length);
-        const randomQuote = filteredQuotes[randomIndex];
+    
+    if (quotes.length > 0) {
+        const randomIndex = Math.floor(Math.random() * quotes.length);
+        const randomQuote = quotes[randomIndex];
         quoteDisplay.innerHTML = `${randomQuote.text} - <em>${randomQuote.category}</em>`;
     } else {
         quoteDisplay.innerHTML = 'No quotes available.';
     }
 }
 
-// Load stored quotes on page load
-document.addEventListener('DOMContentLoaded', function() {
-    displayQuotes(quotes);
+// Function to add a new quote and sync it
+function addQuote(text, category) {
+    if (!text || !category) {
+        alert("Please enter both a quote and a category.");
+        return;
+    }
+
+    const newQuote = { text, category };
+    quotes.push(newQuote);
+    localStorage.setItem('quotes', JSON.stringify(quotes));
+
+    // Post new quote to the server
+    postQuoteToServer(newQuote);
+    displayRandomQuote();
+}
+
+// Event listener for "Show New Quote" button
+document.getElementById('newQuoteBtn').addEventListener('click', displayRandomQuote);
+
+// Event listener for adding a quote
+document.getElementById('addQuoteBtn').addEventListener('click', function () {
+    const text = document.getElementById('quoteInput').value;
+    const category = document.getElementById('categoryInput').value;
+
+    addQuote(text, category);
+});
+
+// Load stored quotes and display a random quote on page load
+document.addEventListener('DOMContentLoaded', function () {
+    displayRandomQuote();
     fetchQuotesFromServer();
 });
